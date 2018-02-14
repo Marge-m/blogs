@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block page_title %} Ваша лента {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h4>Все посты ({{ posts |length}})</h4>
+        </div>
+        <div>
+            {% for post in posts %}
+                <div style="margin-top: 40px;">
+                    <h3>{{ post.header }}</h3>
+                    <p>{{ post.text }}</p>
+                    <p >Опубликовано {{ post.date_created|date:'Y-m-d H:i'}}</p>
+                </div>
+                <div>
+                    {% if post.pk not in finished %}
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <button name='finished' value='{{post.pk}}'>Пометить прочитанным</button>
+                        </form>
+                    {% else %}
+                        <a class="button" style="font-style: italic;">Прочитано</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}

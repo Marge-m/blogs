@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block page_title %} Все блоги {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h4>Все блоги ({{ blogs |length}})</h4>
+        </div>
+        <div>
+            <table class="table">
+                {% for blog in blogs %}
+                    <tr>
+                        <p><a href="/blog/{{ blog.user_id }}"> Блог пользователя {{ blog.user.username }}</a></p>
+                        {% if user.is_authenticated %}
+                            {% if blog.pk not in subscriptions %}
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <button name='subscribe' value='{{blog.pk}}'>Подписаться</button>
+                            </form>
+                            {% else %}
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <button name='unsubscribe' value='{{blog.pk}}'>Отписаться</button>
+                            </form>
+                            {% endif %}
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block page_title %} Блог {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h4>Блог пользователя {{bloguser.username}}</h4>
+        </div>
+        <div style="margin-top: 40px;">
+            {% for post in posts %}
+                <div style="margin-top: 40px;">
+                    <p style="text:bold;"><a href="/post/{{post.pk}}">{{ post.header }}</a></p>
+                    <p>{{ post.text }}</p>
+                    <p>Опубликовано {{ post.date_created|date:'Y-m-d H:i'}}</p>
+                </div>
+            {% endfor %}
+            {% if  user.username == bloguser.username %}
+                <a href="/newpost/">Добавить пост</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}

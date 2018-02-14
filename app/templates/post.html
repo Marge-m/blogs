@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block page_title %} Блог {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h4>Пост пользователя {{author}}</h4>
+        </div>
+        <div style="margin-top: 40px;">
+                <div style="margin-top: 40px;">
+                    <h3>{{ header }}</h3>
+                    <p>{{ text }}</p>
+                    <p>Опубликовано {{ created|date:'Y-m-d H:i'}}</p>
+                </div>
+        </div>
+    </div>
+{% endblock content %}

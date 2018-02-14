@@ -1,0 +1,5 @@
+#Framework
+django==1.10.5
+
+#Database
+psycopg2

@@ -44,3 +44,9 @@ pip install -r requirements.txt
 ./manage.py createsuperuser
 ./manage.py runserver
 ```
+
+### Тесты
+
+```
+./manage.py test
+```

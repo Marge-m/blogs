@@ -121,7 +121,7 @@ var Centrifuge = exports.Centrifuge = function (_EventEmitter) {
 
     var _this = _possibleConstructorReturn(this, (Centrifuge.__proto__ || Object.getPrototypeOf(Centrifuge)).call(this));
 
-    _this._url = url;
+    _this._url = url['url'];
     _this._sockjs = null;
     _this._isSockjs = false;
     _this._binary = false;

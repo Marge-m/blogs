@@ -19,7 +19,7 @@
             var timestamp = parseInt(new Date().getTime()/1000).toString();
 
 
-            var token = 'token';
+            var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MiJ9.mvG1fpprTlVYvrqJbW3jawwCYGagh5n6jHTj3G3BmJ8';
 
             var KEY_ENTER=13;
 
@@ -346,8 +346,37 @@
                     animateDots();
                 }
             });
+             centrifuge.subscribe("news", function(message) {
+                console.log(message);
+                var ol = document.getElementById("chat-messages-list");
+                var li = document.createElement("li");
+                li.innerHTML = message.data;
+                ol.appendChild(li);
+            });
 
             centrifuge.connect();
+
+
+            <!--var subscription = centrifuge.subscribe("news", function(message) {-->
+                <!--// handle message-->
+                <!--console.log(11);-->
+            <!--});-->
+
+            <!--subscription.publish({"input": "hello world"}).then(function() {-->
+                    <!--// success ack from Centrifugo received-->
+                    <!--console.log('err');-->
+                <!--}, function(err) {-->
+                    <!--console.log('err3');-->
+                    <!--// publish call failed with error-->
+                <!--});-->
+            <!--});-->
+            <!---->
+            centrifuge.publish("channel", {"input": "hello"}).then(function(res) {
+                console.log('successfully published');
+            }, function(err) {
+                console.log('publish error', err);
+            });
+            console.log(centrifuge.isConnected());
 
 
         </script>
@@ -359,7 +388,8 @@
         <div class="content">
             <div class="chat-window">
                 <div class="chat-messages" style="height: 406px;">
-                    <ol class="chat-messages-list">
+                    <ol class="chat-messages-list" id="chat-messages-list" style="color:white;">
+                        <li>default message</li>
                     </ol>
                 </div>
                 <div class="chat-input-bar">

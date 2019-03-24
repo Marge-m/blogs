@@ -19,8 +19,8 @@
             var token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0In0.gZy2PH_4qficeLP61hE1F-7e6RbBdJmXp3s6ncxXfco';
 
             var cookie = document.cookie;
-            if (!(typeof(cookie) == 'string') || cookie == '' ) {
-               document.cookie = token + user + new Date().getTime().toString();
+            if ( !(typeof(cookie) == 'string') || cookie == '' || !(cookie.includes('client_id=')) ) {
+               document.cookie = "client_id=" + token + user + new Date().getTime().toString();
             }
             console.log('cookie', document.cookie);
 
@@ -44,6 +44,15 @@
             centrifuge.setToken(token);
             centrifuge.connect();
 
+            function getClientIdfromCookie(cookie) {
+              cookie = cookie.split('; ')
+              for (i = 0; i < cookie.length; i++) {
+                  if (cookie[i].includes('client_id=')) {
+                    return cookie[i].split('=')[1]
+                  }
+                }
+
+            }
             centrifuge.on('connect', function() {
                 console.log("connected to Centrifugo with user ID " + user);
             }, function(err) {
@@ -62,8 +71,7 @@
               ol.appendChild(li);
               $('.chat-input')[0].innerText = '';
             }
-
-             centrifuge.subscribe(document.cookie, function(message) {
+             centrifuge.subscribe(getClientIdfromCookie(document.cookie), function(message) {
                 console.log(message);
                 publishMessage(message);
             });
@@ -72,16 +80,13 @@
           function sendMessagetoServer() {
               var text = $('.chat-input')[0].innerText;
               if (text.length > 0) {
+                  publishMessage({'data': text});
                   $.ajax({
                     type: 'POST',
                     url: 'http://127.0.0.1:7000/chat_post/',
-                    data: {token: token, client_id: document.cookie, text: text},
+                    data: {token: token, client_id: getClientIdfromCookie(document.cookie), text: text},
                     success: function (response) {
                       console.log(response);
-                      publishMessage({'data': text});
-                    },
-                    error: function (request, status, error) {
-                       publishMessage({'data': text});
                     }
                   });
                }

@@ -1,25 +1,12 @@
-# README #
+Устанавливаем окружение
 
-Проект сделан с помощью:
+virtualenv vblogs -p python3.5
+source vblogs/bin/activate
+git clone https://marge-m284@bitbucket.org/marge-m284/blogs.git
+cd blogs
+pip install -r requirements.txt
 
-* python==3.5.0
-* psql==10.0
-* virtualenv==15.1.0
-* + requirements.txt (django==1.10.5, psycopg2)
-
-
-### Функционал
-
-Подписка/отписка на блоги - /allblogs/
-
-Лента новостей - /feed/ (можно пометить сообщение прочитанным)
-
-Залогиниться/разлогиниться - /login /logout
-
-Все остальное - автоматически
-
-
-### Создаем PostgreSQL базу:
+Создаем PostgreSQL базу:
 ```
 psql
 create user blogs_user with password 'password';
@@ -31,34 +18,10 @@ create database blogs_test owner blogs_user;
 \q
 ```
 
-### Устанавливаем окружение
-```
-virtualenv venv -p python3.5
-source venv/bin/activate
-git clone https://marge-m284@bitbucket.org/marge-m284/blogs.git
-cd blogs
-```
 
-В blogs/settings.py при необходимости меняем имя ДБ и способ отправки сообщений (pp.129-137).
-
-По дефолту настроен вывод писем в консоль.
-
-Если нужна отправка действующей почтой, то снимаем комментирование gmail-настроек и вводим адрес действующей почты и пароль, а localhost настройки убираем.
-
-```
-pip install -r requirements.txt
-```
-
-### Миграции и запуск
-
+Миграции и запуск:
 ```
 ./manage.py migrate
 ./manage.py createsuperuser
 ./manage.py runserver
-```
-
-### Тесты
-
-```
-./manage.py test
 ```

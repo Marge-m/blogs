@@ -68,6 +68,7 @@
               var ol = document.getElementById("chat-messages-list");
               var li = document.createElement("li");
               li.innerHTML = message.data;
+              li.setAttribute("style", "margin-top:5px;");
               ol.appendChild(li);
               $('.chat-input')[0].innerText = '';
             }
@@ -102,7 +103,7 @@
             <div class="chat-window">
                 <div class="chat-messages" style="height: 406px;">
                     <ol class="chat-messages-list" id="chat-messages-list" style="color:white;">
-                        <li>default message</li>
+                        <li>First message</li>
                     </ol>
                 </div>
                 <div class="chat-input-bar">

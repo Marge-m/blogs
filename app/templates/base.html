@@ -24,16 +24,6 @@
             }
             console.log('cookie', document.cookie);
 
-            <!--if (typeof(cookie) == 'string') {-->
-              <!--var expired = parseInt(cookie.split(' expired ')[1])-->
-              <!--console.log('exp', expired, cookie)-->
-              <!--if (parseInt(new Date().getTime()/1000 ) > expired) {-->
-                <!--document.cookie = user + token + timestamp + ' expired ' + (parseInt(new Date().getTime()/1000) + 86400).toString();-->
-              <!--}-->
-            <!--} else {-->
-              <!--document.cookie = user + token + timestamp + ' expired ' + (parseInt(new Date().getTime()/1000) + 86400).toString();-->
-            <!--}-->
-
             var centrifuge = new Centrifuge({
                 "url": url,
                 "user": user,
@@ -64,24 +54,36 @@
             });
 
             function publishMessage(message) {
-              console.log(message);
               var ol = document.getElementById("chat-messages-list");
               var li = document.createElement("li");
-              li.innerHTML = message.data;
+              message = message.data.split('&');
+              var mess = message[0];
+              var is_from_consultant = message[1];
+              if (is_from_consultant == 'True' ) {
+                li.innerHTML = '<strong>Оператор:</strong> ' + mess;
+              } else {
+                li.innerHTML = '<strong>Вы:</strong> ' + mess;
+              }
               li.setAttribute("style", "margin-top:5px;");
               ol.appendChild(li);
               $('.chat-input')[0].innerText = '';
             }
              centrifuge.subscribe(getClientIdfromCookie(document.cookie), function(message) {
-                console.log(message);
                 publishMessage(message);
             });
+            $.ajax({
+                type: 'POST',
+                url: 'http://127.0.0.1:7000/get_messages/',
+                data: {token: token, client_id: getClientIdfromCookie(document.cookie)},
+                success: function (response) {
+                  $('#chat-messages').replaceWith(response);
+                }
+              });
 
 
           function sendMessagetoServer() {
               var text = $('.chat-input')[0].innerText;
               if (text.length > 0) {
-                  publishMessage({'data': text});
                   $.ajax({
                     type: 'POST',
                     url: 'http://127.0.0.1:7000/chat_post/',
@@ -101,7 +103,7 @@
     <body>
         <div class="content">
             <div class="chat-window">
-                <div class="chat-messages" style="height: 406px;">
+                <div class="chat-messages" id="chat-messages" style="height: 406px;">
                     <ol class="chat-messages-list" id="chat-messages-list" style="color:white;">
                         <li>First message</li>
                     </ol>
